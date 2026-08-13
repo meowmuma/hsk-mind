@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-ink: #241b17;
+  --color-parchment: #f5ead6;
+  --color-vermilion: #8f2d2d;
+  --color-gold: #c4963b;
+  --font-ui: "Noto Sans Thai", "Tahoma", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  min-height: 100%;
+}
+body {
+  margin: 0;
+  color: var(--color-ink);
+  background: var(--color-parchment);
+  font-family: var(--font-ui);
+}
+button,
+input {
+  font: inherit;
+}
+:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 3px;
+}

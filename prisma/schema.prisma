@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum HskCode {
+  HSK1
+  HSK2
+  HSK3
+  HSK4
+}
+
+model User {
+  id           String          @id @default(uuid()) @db.Uuid
+  email        String          @unique
+  passwordHash String
+  role         UserRole        @default(USER)
+  status       UserStatus      @default(ACTIVE)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  profile      UserProfile?
+  sessions     UserSession[]
+  unlocks      UserHskUnlock[]
+}
+
+model UserProfile {
+  userId      String   @id @db.Uuid
+  displayName String?
+  avatarKey   String?
+  targetHsk   HskCode?
+  level       Int      @default(1)
+  totalXp     Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model UserSession {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @db.Uuid
+  tokenHash  String   @unique
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, expiresAt])
+}
+
+model HskLevel {
+  id          Int             @id
+  code        HskCode         @unique
+  thaiName    String
+  order       Int             @unique
+  unlockLevel Int
+  active      Boolean         @default(true)
+  stages      Stage[]
+  unlocks     UserHskUnlock[]
+  vocabulary  Vocabulary[]
+}
+
+model Vocabulary {
+  id            String             @id @default(uuid()) @db.Uuid
+  hskLevelId    Int
+  hanzi         String
+  pinyin        String
+  pinyinSortKey String
+  thaiMeaning   String
+  audioUrl      String?
+  sourceRow     Int?
+  sourceVersion String?
+  active        Boolean            @default(true)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  hskLevel      HskLevel           @relation(fields: [hskLevelId], references: [id])
+  stageVocab    StageVocabulary[]
+  @@index([hskLevelId, pinyinSortKey])
+}
+
+model Stage {
+  id         String             @id @default(uuid()) @db.Uuid
+  hskLevelId Int
+  stageNo    Int
+  generation String
+  active     Boolean            @default(true)
+  createdAt  DateTime           @default(now())
+  hskLevel   HskLevel           @relation(fields: [hskLevelId], references: [id])
+  vocabulary StageVocabulary[]
+  @@unique([hskLevelId, stageNo])
+}
+
+model StageVocabulary {
+  stageId      String     @db.Uuid
+  vocabularyId String     @db.Uuid
+  orderNo      Int
+  stage        Stage      @relation(fields: [stageId], references: [id], onDelete: Cascade)
+  vocabulary   Vocabulary @relation(fields: [vocabularyId], references: [id])
+  @@id([stageId, vocabularyId])
+  @@unique([stageId, orderNo])
+}
+
+model UserHskUnlock {
+  userId     String   @db.Uuid
+  hskLevelId Int
+  unlockedAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hskLevel   HskLevel @relation(fields: [hskLevelId], references: [id])
+  @@id([userId, hskLevelId])
+}
+
+model BalanceConfig {
+  key         String
+  version     Int
+  valuesJson  Json
+  effectiveAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  @@id([key, version])
+}

@@ -1,0 +1,38 @@
+{
+  "name": "hsk-mind",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @hsk-mind/web --filter @hsk-mind/api dev",
+    "dev:web": "pnpm --filter @hsk-mind/web dev",
+    "dev:api": "pnpm --filter @hsk-mind/api dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "pnpm -r test",
+    "db:generate": "prisma generate",
+    "db:validate": "prisma validate",
+    "db:migrate:deploy": "prisma migrate deploy",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:migrate": "prisma migrate dev"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@eslint/js": "^9.31.0",
+    "@types/node": "^24.0.10",
+    "eslint": "^9.31.0",
+    "globals": "^16.2.0",
+    "prettier": "^3.6.2",
+    "prisma": "^6.15.0",
+    "tsx": "^4.20.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.37.0",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.15.0"
+  }
+}
