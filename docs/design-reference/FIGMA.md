@@ -26,6 +26,8 @@
 
 All current exported design references must be kept under `docs/design-reference/`. The legacy package-level design-reference directory has been retired; new exports must be placed in the relevant category directory above.
 
+Landing Page exports are normalized under `docs/design-reference/auth/landing-page/`. `landing-page.png` is a visual reference only and must not be rendered as the runtime page; the runtime implementation uses React/CSS and copies only required assets into `apps/web/public/assets/landing/`.
+
 ## Design Reference Priority
 
 1. Figma `Hideframe Prototype`

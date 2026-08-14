@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  distDir: ".next-build",
   transpilePackages: [
     "@hsk-mind/game-config",
     "@hsk-mind/shared-types",

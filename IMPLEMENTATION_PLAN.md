@@ -2,10 +2,10 @@
 
 ## Project Status
 
-- Current phase: **Phase 1 — Foundation** (complete and verified)
+- Current phase: **Phase 2 — Authentication & Onboarding** (complete and verified)
 - Last updated: **2026-08-14**
-- Overall status: **Phase 1 complete. Phase 2 has not started.**
-- Major blockers: None for Phase 1. Figma, mascot, avatar, character, and production audio assets remain non-blocking and use replaceable placeholders.
+- Overall status: **Phase 1 and Phase 2 complete. Phase 3 has not started.**
+- Major blockers: None for Phase 2 product verification. Email delivery remains a deferred adapter integration and does not block the verified random/hashed/expiring reset-token flow. Figma, mascot, avatar, character, and production audio assets remain non-blocking and use replaceable placeholders.
 
 ## Locked Product Decisions
 
@@ -62,25 +62,25 @@ These rules come from the user brief and the product specification. Implementati
 
 These are defaults, not scattered constants. Store them in a typed shared config first; expose admin/database overrides only with audit history and effective dates.
 
-| Area | Initial value |
-|---|---|
-| Stage size | 20 words |
-| Level cap | 40 |
-| Level XP curve | 200 + 25 per current level |
-| City level gates | HSK1 Lv1, HSK2 Lv8, HSK3 Lv18, HSK4 Lv28 |
-| City completion/star rate | 70% |
-| Quiz/Listening timer | 15 seconds per item |
-| Quiz/Listening base XP | 10 XP per newly rewardable vocabulary item |
-| Quiz/Listening star thresholds | 60%, 75%, 90% |
-| Quiz combo milestones | x5/x10/x15/x20: 5/10/15/20 XP |
-| Listening replay limit | 1 additional play |
-| Matching time thresholds | 3.0s / 4.5s / 6.0s per pair |
-| Matching XP for 20 items | 200 / 150 / 100 / 0 by tier |
-| Review rewards | 2 XP per resolved word, 10 XP clear bonus, 1 claim/word/day |
-| Monthly accuracy eligibility | 100 eligible answers |
-| Monthly speed eligibility | 100 timed items and at least 70% Quiz+Listening accuracy |
-| Ranking timezone | Asia/Bangkok |
-| Daily missions | 3/day; reward amounts TBD placeholders; MVP `rankEligible=false`, configurable later |
+| Area                           | Initial value                                                                        |
+| ------------------------------ | ------------------------------------------------------------------------------------ |
+| Stage size                     | 20 words                                                                             |
+| Level cap                      | 40                                                                                   |
+| Level XP curve                 | 200 + 25 per current level                                                           |
+| City level gates               | HSK1 Lv1, HSK2 Lv8, HSK3 Lv18, HSK4 Lv28                                             |
+| City completion/star rate      | 70%                                                                                  |
+| Quiz/Listening timer           | 15 seconds per item                                                                  |
+| Quiz/Listening base XP         | 10 XP per newly rewardable vocabulary item                                           |
+| Quiz/Listening star thresholds | 60%, 75%, 90%                                                                        |
+| Quiz combo milestones          | x5/x10/x15/x20: 5/10/15/20 XP                                                        |
+| Listening replay limit         | 1 additional play                                                                    |
+| Matching time thresholds       | 3.0s / 4.5s / 6.0s per pair                                                          |
+| Matching XP for 20 items       | 200 / 150 / 100 / 0 by tier                                                          |
+| Review rewards                 | 2 XP per resolved word, 10 XP clear bonus, 1 claim/word/day                          |
+| Monthly accuracy eligibility   | 100 eligible answers                                                                 |
+| Monthly speed eligibility      | 100 timed items and at least 70% Quiz+Listening accuracy                             |
+| Ranking timezone               | Asia/Bangkok                                                                         |
+| Daily missions                 | 3/day; reward amounts TBD placeholders; MVP `rankEligible=false`, configurable later |
 
 ## Architecture
 
@@ -206,21 +206,25 @@ Core entities:
 
 ## Phase 2 — Authentication & Onboarding
 
-- [ ] Implement Landing Page according to the Design Reference/Figma.
-- [ ] Route the “เริ่มการฝึก” button to Register.
-- [ ] Route the “เข้าสู่ระบบ” button to Login.
-- [ ] Show HSK 1–4 scope and the current vocabulary dataset information on the Landing Page.
-- [ ] Do not present features outside the MVP as already available.
-- [ ] Implement register with email validation, minimum eight-character password, duplicate-email handling, confirm-password UI, and loading/error states.
-- [ ] Implement Argon2 hashing and never log passwords or tokens.
-- [ ] Implement login, logout, refresh/session rotation, suspension handling, and secure HttpOnly/Secure/SameSite cookies.
-- [ ] Implement forgot-password and reset-password tokens as random, hashed, expiring database records.
-- [ ] Add rate limiting and abuse-safe error responses to auth endpoints.
-- [ ] Implement onboarding avatar placeholder selection with clear selected/disabled states.
-- [ ] Persist player display name and target HSK 1–4; target does not bypass HSK1.
-- [ ] Create the initial HSK1 unlock transactionally when onboarding completes; make it idempotent.
-- [ ] Redirect completed users to the main map and incomplete users back to onboarding.
-- [ ] Match the register/onboarding references while covering validation, loading, empty, error, success, and responsive states.
+- [x] Implement Landing Page according to the Design Reference/Figma.
+- [x] Route the “เริ่มการฝึก” button to Register.
+- [x] Route the “เข้าสู่ระบบ” button to Login.
+- [x] Show HSK 1–4 scope and the current vocabulary dataset information on the Landing Page.
+- [x] Do not present features outside the MVP as already available.
+- [x] Implement register with email validation, minimum eight-character password, duplicate-email handling, confirm-password UI, and loading/error states.
+- [x] Implement Argon2 hashing and never log passwords or tokens.
+- [x] Implement login, logout, refresh/session rotation, suspension handling, and secure HttpOnly/Secure/SameSite cookies.
+- [x] Apply and verify forgot-password and reset-password token persistence against PostgreSQL; code uses random, hashed, expiring tokens.
+- [x] Add rate limiting and abuse-safe error responses to auth endpoints.
+- [x] Implement onboarding avatar placeholder selection with clear selected/disabled states.
+- [x] Persist player display name and target HSK 1–4; target does not bypass HSK1.
+- [x] Create the initial HSK1 unlock transactionally when onboarding completes; make it idempotent.
+- [x] Redirect completed users to the main map and incomplete users back to onboarding.
+- [x] Complete visual verification against the register/onboarding references for validation, loading, empty, error, success, and responsive states.
+- [x] Add unit coverage for registration hashing, duplicate email, invalid login, generic forgot-password behavior, reset-token expiry, onboarding persistence, initial HSK1 unlock, and duplicate completion.
+- [x] Run the database-backed API auth flow and protected-route integration tests.
+- [x] Run the web browser auth flow: register → onboarding → login/logout → protected map route.
+- [x] Apply the Phase 2 Prisma migration, seed, and verify database readiness.
 
 ## Phase 3 — Vocabulary & Stage Engine
 
@@ -455,17 +459,22 @@ HSK Mind is a playable MVP only when all of the following are true:
 
 ## Change Log
 
-| Date | Change | Reason |
-|---|---|---|
-| 2026-08-14 | Created discovery-based master implementation checklist. | Greenfield workspace contains specifications, design references, and the original vocabulary workbook but no application source. |
-| 2026-08-14 | Recorded workbook structure and data risks: 2,000 rows; HSK counts 300/200/500/1,000; 21 duplicate Hanzi values; no audio or dedicated Pinyin sort-key column. | Drives stable UUID vocabulary entities, import validation, audio fallback, and deterministic stage generation. |
-| 2026-08-14 | Chose server-authoritative, ledger-based, idempotent reward processing as the architecture baseline. | Prevents client tampering and duplicate XP from retries/replays while preserving monthly/lifetime separation. |
-| 2026-08-14 | Approved and locked Pinyin sorting, full-item staged completion, exact-ratio completion, Review queue snapshots, one active attempt, lazy idempotent seasons, MVP mission ranking exclusion, and Matching 0-Star XP of 0. | Product decisions supplied before Phase 1 implementation. |
-| 2026-08-14 | Confirmed Figma, mascot, avatar, character, and production audio assets are non-blocking for Phase 1. | Foundation uses replaceable asset keys and placeholders. |
-| 2026-08-14 | Implemented Phase 1 Foundation: pnpm workspace, Next.js web, NestJS API, PostgreSQL Compose, Prisma schema/migration/seed, shared packages, environment validation, Swagger/health/logging, design tokens, and test tooling. | Approved Architecture and Phase 1 scope. |
-| 2026-08-14 | Verified schema, generated Prisma Client, type checks, lint, formatting, unit tests, and production builds. | Evidence-based Phase 1 verification. |
-| 2026-08-14 | Added Playwright configuration and a skipped Phase 2 placeholder test; test discovery now lists the configured Chromium project. | Establishes the E2E skeleton without starting authentication/onboarding work. |
-| 2026-08-14 | Corrected `BalanceConfig` to use composite identity `(key, version)` so future audited balance versions can coexist. | Required for versioned configuration without overwriting prior values. |
-| 2026-08-14 | PostgreSQL runtime verification remains open because Docker Desktop's engine is unavailable in the current environment. | Migration, seed, readiness, and combined local startup cannot be truthfully marked complete yet. |
-| 2026-08-14 | Started PostgreSQL successfully, applied the initial migration, seeded 4 HSK levels and game-balance version 1, verified API readiness, and verified web/API/DB running together. | Docker Desktop became available; all remaining Phase 1 runtime checks passed. |
-| 2026-08-14 | Prepared repository hygiene and Design Source documentation before Phase 2; no Phase 2 implementation was started. | Keep secrets/runtime artifacts out of Git and establish UX/UI source-of-truth rules. |
+| Date       | Change                                                                                                                                                                                                                                | Reason                                                                                                                           |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-08-14 | Created discovery-based master implementation checklist.                                                                                                                                                                              | Greenfield workspace contains specifications, design references, and the original vocabulary workbook but no application source. |
+| 2026-08-14 | Recorded workbook structure and data risks: 2,000 rows; HSK counts 300/200/500/1,000; 21 duplicate Hanzi values; no audio or dedicated Pinyin sort-key column.                                                                        | Drives stable UUID vocabulary entities, import validation, audio fallback, and deterministic stage generation.                   |
+| 2026-08-14 | Chose server-authoritative, ledger-based, idempotent reward processing as the architecture baseline.                                                                                                                                  | Prevents client tampering and duplicate XP from retries/replays while preserving monthly/lifetime separation.                    |
+| 2026-08-14 | Approved and locked Pinyin sorting, full-item staged completion, exact-ratio completion, Review queue snapshots, one active attempt, lazy idempotent seasons, MVP mission ranking exclusion, and Matching 0-Star XP of 0.             | Product decisions supplied before Phase 1 implementation.                                                                        |
+| 2026-08-14 | Confirmed Figma, mascot, avatar, character, and production audio assets are non-blocking for Phase 1.                                                                                                                                 | Foundation uses replaceable asset keys and placeholders.                                                                         |
+| 2026-08-14 | Implemented Phase 1 Foundation: pnpm workspace, Next.js web, NestJS API, PostgreSQL Compose, Prisma schema/migration/seed, shared packages, environment validation, Swagger/health/logging, design tokens, and test tooling.          | Approved Architecture and Phase 1 scope.                                                                                         |
+| 2026-08-14 | Verified schema, generated Prisma Client, type checks, lint, formatting, unit tests, and production builds.                                                                                                                           | Evidence-based Phase 1 verification.                                                                                             |
+| 2026-08-14 | Added Playwright configuration and a skipped Phase 2 placeholder test; test discovery now lists the configured Chromium project.                                                                                                      | Establishes the E2E skeleton without starting authentication/onboarding work.                                                    |
+| 2026-08-14 | Corrected `BalanceConfig` to use composite identity `(key, version)` so future audited balance versions can coexist.                                                                                                                  | Required for versioned configuration without overwriting prior values.                                                           |
+| 2026-08-14 | PostgreSQL runtime verification remains open because Docker Desktop's engine is unavailable in the current environment.                                                                                                               | Migration, seed, readiness, and combined local startup cannot be truthfully marked complete yet.                                 |
+| 2026-08-14 | Started PostgreSQL successfully, applied the initial migration, seeded 4 HSK levels and game-balance version 1, verified API readiness, and verified web/API/DB running together.                                                     | Docker Desktop became available; all remaining Phase 1 runtime checks passed.                                                    |
+| 2026-08-14 | Prepared repository hygiene and Design Source documentation before Phase 2; no Phase 2 implementation was started.                                                                                                                    | Keep secrets/runtime artifacts out of Git and establish UX/UI source-of-truth rules.                                             |
+| 2026-08-14 | Started Phase 2 Authentication & Onboarding: added Argon2/session/reset-token backend foundations, idempotent onboarding with HSK1 unlock, auth routes/forms/guards, Landing Page, design-reference-backed assets, and unit coverage. | Phase 2 approval and supplied auth/onboarding design references.                                                                 |
+| 2026-08-14 | Phase 2 database/browser verification remains open because Docker PostgreSQL is unavailable and Next.js production build timed out without output.                                                                                    | Do not mark unverified migration, API flow, web flow, or visual QA as complete.                                                  |
+| 2026-08-14 | Completed Phase 2 runtime verification: PostgreSQL healthy, migration/seed idempotent, API health/readiness passed, 14 database-backed auth/onboarding checks passed, production build passed, and 3 Chromium E2E tests passed.       | Close Phase 2 only after runtime evidence beyond unit tests.                                                                     |
+| 2026-08-14 | Normalized Landing references under `docs/design-reference/auth/landing-page/`, kept only logo/feature assets in the runtime bundle, and verified React/CSS desktop/mobile rendering.                                                 | Preserve exported references as supporting sources without shipping the full-page reference screenshot as UI.                    |
+| 2026-08-14 | Documented Reset Password as an inferred design and email delivery as a deferred adapter; random hashed expiring token validation and password reset were verified against PostgreSQL.                                                | The final Reset Password Figma frame and production email provider are not required to validate Phase 2 security behavior.       |

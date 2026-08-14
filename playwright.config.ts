@@ -13,7 +13,7 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: 'cmd /c "node_modules\\.bin\\next.CMD" dev',
+    command: "node_modules\\.bin\\next.CMD dev",
     cwd: "apps/web",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,

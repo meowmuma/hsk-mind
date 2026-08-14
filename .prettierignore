@@ -1,8 +1,10 @@
 node_modules
 .next
+.next-build
 dist
 coverage
 playwright-report
 test-results
 HSK_Mind_Codex_Package/design-reference
+HSK_Mind_Codex_Package/HSK_Mind_Codex_Spec.md
 HSK_3.0_1-4_Pinyin_Thai_A-Z.xlsx
